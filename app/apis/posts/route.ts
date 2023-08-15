@@ -1,7 +1,6 @@
 import { NextResponse,NextRequest } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
-
 const client = new PrismaClient();
 
 export async function POST(request:NextRequest) {
@@ -27,13 +26,14 @@ export async function POST(request:NextRequest) {
 }
 
 export async function GET(request:NextRequest) {
-    
-    const req = await request.json()  
+    const queryParam = request.nextUrl.searchParams.get("id");
+
     try {
-      if (req !== null) {
+      if (queryParam !== null) {
+        const postId = Number(queryParam)
         const data = await client.post.findFirst({
           where: {
-            id: req.data.id,
+            id: postId
           },
         });
   
