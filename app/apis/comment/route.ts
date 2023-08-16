@@ -5,9 +5,13 @@ const client = new PrismaClient();
 
 export async function POST(request:NextRequest) {
   const req = await request.json()  
-
+  const post = client.post.findFirst({
+    where:{
+      id:req.data.postId
+    }
+  })
   try {
-    if (req !== null) {
+    if (req !== null && post !== null) {
       const data = await client.post.create({
         data: {
           title: req.data.title,
@@ -93,4 +97,3 @@ export async function GET(request:NextRequest) {
       return NextResponse.json({ error: 'An error occurred' }, { status: 400 }); // 500 Internal Server Error 응답을 반환합니다.
     }
   }
-  

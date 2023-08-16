@@ -1,35 +1,26 @@
 
-import NavBar from '@/components/navbar'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useState} from 'react';
+async function getData() {
+  const res = await fetch('http://localhost:3000/apis/posts/getAllPost',{ cache: 'no-store' })
+  
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+ 
+  return res.json()
+}
 
-export default async function Post() {
-  const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const response = await fetch("http://localhost:3000/apis/posts/getAllPost");
-        const data = await response.json();
-        setPosts(data.data);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      }
-    }
+export default async function Page() {
+  const data = await getData();
 
-    fetchPosts();
-  }, []);
   return (
-    <main>
-      <div>  
-        {posts.map(post => (
-          <div key={post.id}>
-            <h2>{post.title}</h2>
-            <p>{post.content}</p>
-          </div>
-        ))}
+    <main className="bg-gray-100 p-6">
+      {data.data.map((item, index) => (
+        <div key={index} className="bg-white rounded-lg shadow-md p-4 mb-4">
+          <h1 className="text-xl font-bold">{item.title}</h1>
+          <p className="mt-2 text-gray-700">{item.content}</p>
         </div>
+      ))}
     </main>
-  )
+  );
 }

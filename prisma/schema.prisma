@@ -11,9 +11,17 @@ datasource db {
 }
 
 model Post {
-  id        Int     @default(autoincrement()) @id
+  id        String     @default(uuid()) @id
   title     String
   content   String?
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+}
+
+model Comment {
+  id        String     @default(uuid()) @id
+  postId Int
+  content String
   createdAt     DateTime  @default(now()) @map(name: "created_at")
   updatedAt     DateTime  @updatedAt @map(name: "updated_at")
 }
